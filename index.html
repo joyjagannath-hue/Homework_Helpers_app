@@ -1,0 +1,1894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework Helpers - Crush Procrastination & Master Your Work</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              200: '#ddd6fe',
+              300: '#c4b5fd',
+              400: '#a78bfa',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+              700: '#6d28d9',
+              800: '#5b21b6',
+              900: '#4c1d95',
+            },
+            accent: {
+              amber: '#f59e0b',
+              emerald: '#10b981',
+              rose: '#f43f5e',
+              sky: '#0284c7'
+            }
+          },
+          keyframes: {
+            pulseSubtle: {
+              '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+              '50%': { transform: 'scale(1.02)', opacity: '0.95' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-6px)' }
+            }
+          },
+          animation: {
+            'pulse-subtle': 'pulseSubtle 3s infinite ease-in-out',
+            'float': 'float 4s infinite ease-in-out'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    h1, h2, h3, h4, .font-heading {
+      font-family: 'Outfit', sans-serif;
+    }
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(241, 245, 249, 0.8);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- TOP HEADER / APP BAR -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <!-- Logo & App Name -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchScreen(1)">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-amber-400 flex items-center justify-center text-white shadow-md shadow-brand-500/25">
+          <i data-lucide="sparkles" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xl font-bold font-heading bg-gradient-to-r from-brand-700 via-indigo-700 to-brand-500 bg-clip-text text-transparent">Homework Helpers</span>
+            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full border border-amber-200">Anti-Procrastination</span>
+          </div>
+          <p class="text-xs text-slate-500 hidden sm:block">Step-by-step guidance &middot; Zero answer spoilers &middot; Accountability</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs & Points Counter -->
+      <div class="flex items-center space-x-2 sm:space-x-4">
+        <!-- Screen Navigation Buttons -->
+        <nav class="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-semibold text-slate-600">
+          <button id="nav-screen-1" onclick="switchScreen(1)" class="px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all bg-white text-brand-700 shadow-sm">
+            <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+            <span class="hidden md:inline">Screen 1:</span> Overview & Calendar
+          </button>
+          <button id="nav-screen-2" onclick="switchScreen(2)" class="px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all text-slate-600 hover:text-brand-600">
+            <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+            <span class="hidden md:inline">Screen 2:</span> Doubt Solver
+          </button>
+          <button id="nav-screen-3" onclick="switchScreen(3)" class="px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all text-slate-600 hover:text-brand-600">
+            <i data-lucide="trophy" class="w-3.5 h-3.5"></i>
+            <span class="hidden md:inline">Screen 3:</span> Coach & Rewards
+          </button>
+        </nav>
+
+        <!-- Bonus Points Badge -->
+        <div onclick="switchScreen(3)" title="Click to view points vault and rewards" class="cursor-pointer group flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-50 to-amber-100 border border-amber-300 text-amber-900 shadow-sm hover:scale-105 transition-transform">
+          <i data-lucide="zap" class="w-4 h-4 text-amber-500 fill-amber-500 group-hover:rotate-12 transition-transform"></i>
+          <span class="font-bold text-sm" id="header-points-display">120 pts</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 pb-20">
+
+    <!-- ========================================== -->
+    <!-- SCREEN 1: GREETINGS, NEXT DUE DATE & CALENDAR -->
+    <!-- ========================================== -->
+    <section id="screen-1" class="transition-opacity duration-300">
+      
+      <!-- HERO GREETING & URGENT REMINDER BANNER -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-900 via-brand-800 to-purple-900 text-white p-6 sm:p-8 shadow-xl shadow-brand-900/10 mb-8 border border-white/10">
+        <!-- Decorative Ambient Blobs -->
+        <div class="absolute -right-16 -top-16 w-64 h-64 bg-amber-400/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-brand-500/30 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div class="space-y-3 max-w-2xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-amber-300 text-xs font-semibold border border-white/10">
+              <i data-lucide="flame" class="w-3.5 h-3.5 fill-amber-400 text-amber-400"></i>
+              <span>Anti-Procrastination Mode Active</span>
+            </div>
+            
+            <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight font-heading leading-tight" id="student-greeting">
+              Hey there! Deep breath. You are NOT behind forever.
+            </h1>
+            
+            <p class="text-brand-100 text-sm sm:text-base leading-relaxed">
+              We know the feeling: homework was forgotten, the deadline is breathing down your neck, and starting feels like lifting a boulder. We're here to break it down into easy, bite-sized steps—no direct answers, just pure clarity and momentum!
+            </p>
+
+            <!-- Next Due Date Callout Box -->
+            <div class="mt-4 p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-inner">
+              <div class="flex items-center gap-3.5">
+                <div class="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 shrink-0">
+                  <i data-lucide="alarm-clock" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <div class="text-xs uppercase tracking-wider text-amber-300 font-semibold">Closest Upcoming Submission</div>
+                  <div class="text-lg font-bold text-white flex items-center gap-2" id="next-hw-title">
+                    Physics: Electromagnetism Problem Set
+                  </div>
+                  <div class="text-xs text-indigo-200 flex items-center gap-2 mt-0.5">
+                    <span id="next-hw-date" class="font-medium text-white">Tomorrow, 11:59 PM</span>
+                    <span>&middot;</span>
+                    <span id="next-hw-countdown" class="px-2 py-0.5 rounded bg-rose-500/30 text-rose-200 border border-rose-400/30 font-mono font-bold text-[11px]">Due in 18h 32m</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DIRECT BUTTON TO SCREEN 2 (Prompt Requirement: "click once to direct to the new screen") -->
+          <div class="lg:self-center flex flex-col items-center sm:items-end justify-center">
+            <button onclick="switchScreen(2)" class="w-full sm:w-auto group relative px-7 py-4 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-bold text-base shadow-xl shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+              <span>I'm Stuck! Solve My Doubts</span>
+              <div class="w-8 h-8 rounded-lg bg-black/10 flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                <i data-lucide="arrow-right" class="w-5 h-5 text-slate-950"></i>
+              </div>
+            </button>
+            <p class="text-center sm:text-right text-xs text-brand-200 mt-2">
+              <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-1"></span>
+              Click once to enter Screen 2 (Question & Doubt Solver)
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN DASHBOARD CONTENT: 2 COLUMNS (Calendar + Daily Reminders Checklist) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- LEFT COLUMN: INTERACTIVE HOMEWORK CALENDAR -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+            
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
+                  <i data-lucide="calendar-days" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h2 class="text-xl font-bold font-heading text-slate-900">Homework Calendar</h2>
+                  <p class="text-xs text-slate-500">Every upcoming deadline mapped out so nothing slips</p>
+                </div>
+              </div>
+
+              <!-- Month navigation -->
+              <div class="flex items-center gap-2">
+                <button onclick="changeCalendarMonth(-1)" class="p-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600">
+                  <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                </button>
+                <span id="calendar-month-year" class="font-bold text-sm text-slate-700 min-w-[120px] text-center">November 2026</span>
+                <button onclick="changeCalendarMonth(1)" class="p-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600">
+                  <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Calendar Days Header -->
+            <div class="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-slate-400 mb-2">
+              <div>Sun</div>
+              <div>Mon</div>
+              <div>Tue</div>
+              <div>Wed</div>
+              <div>Thu</div>
+              <div>Fri</div>
+              <div>Sat</div>
+            </div>
+
+            <!-- Dynamic Calendar Grid -->
+            <div id="calendar-grid" class="grid grid-cols-7 gap-1 text-sm">
+              <!-- Rendered via JS -->
+            </div>
+
+            <!-- Calendar Legend & Help -->
+            <div class="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
+              <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Urgent (&lt; 24h)</span>
+                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Due this week</span>
+                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Completed</span>
+              </div>
+              <span class="text-slate-400 italic">Click any date to see or add homework</span>
+            </div>
+          </div>
+
+          <!-- QUICK ADD HOMEWORK MODAL TRIGGER / FORM -->
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+            <h3 class="text-base font-bold font-heading text-slate-900 mb-3 flex items-center gap-2">
+              <i data-lucide="plus-circle" class="w-4 h-4 text-brand-600"></i>
+              Add Forgotten / New Homework to Calendar
+            </h3>
+            <form id="add-hw-form" onsubmit="handleAddNewHomework(event)" class="space-y-3">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-medium text-slate-600 mb-1">Homework Subject / Topic</label>
+                  <input type="text" id="hw-title-input" required placeholder="e.g. Calculus: Chain Rule Exercise 4.2" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-600 mb-1">Subject Category</label>
+                  <select id="hw-subject-input" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Biology">Biology</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Literature & History">Literature & History</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-medium text-slate-600 mb-1">Submission Date</label>
+                  <input type="date" id="hw-date-input" required class="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-600 mb-1">Estimated Difficulty / Effort</label>
+                  <select id="hw-effort-input" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                    <option value="Quick Check (15 min)">Quick Check (15 min)</option>
+                    <option value="Moderate (45 min)" selected>Moderate (45 min)</option>
+                    <option value="Heavy Boulder (2+ hours)">Heavy Boulder (2+ hours)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-end pt-2">
+                <button type="submit" class="px-5 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs transition-colors flex items-center gap-1.5 shadow-sm">
+                  <i data-lucide="calendar-plus" class="w-4 h-4"></i>
+                  Update to Calendar & Reminders
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: DAILY REMINDERS & CHECK OFF HOMEWORK -->
+        <div class="lg:col-span-5 space-y-6">
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                  <i data-lucide="check-square" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h2 class="text-xl font-bold font-heading text-slate-900">Daily Reminders</h2>
+                  <p class="text-xs text-slate-500">Tick off when completed to earn instant points!</p>
+                </div>
+              </div>
+              <span id="completed-count-badge" class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+                1 / 4 Done
+              </span>
+            </div>
+
+            <!-- Homework List Items -->
+            <div id="homework-checklist-container" class="space-y-3">
+              <!-- Populated via JS -->
+            </div>
+            
+            <!-- Procrastination Tip of the Day -->
+            <div class="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-start gap-3">
+                <div class="p-1.5 rounded-lg bg-brand-100 text-brand-700 shrink-0 mt-0.5">
+                  <i data-lucide="lightbulb" class="w-4 h-4"></i>
+                </div>
+                <div class="space-y-1">
+                  <h4 class="text-xs font-bold text-slate-900">Anti-Procrastination Rule #1</h4>
+                  <p class="text-xs text-slate-600 leading-relaxed">
+                    <strong>The 5-Minute Rule:</strong> You don't have to finish the whole assignment right now. Just commit to reading question #1 for 5 minutes. 80% of resistance vanishes after starting!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Link to Screen 2 -->
+            <div class="mt-4 pt-4 border-t border-slate-100">
+              <button onclick="switchScreen(2)" class="w-full py-2.5 px-4 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-xs border border-indigo-200 flex items-center justify-center gap-2 transition-colors">
+                <i data-lucide="brain" class="w-4 h-4"></i>
+                Stuck on one of these? Ask questions on Screen 2 &rarr;
+              </button>
+            </div>
+          </div>
+
+          <!-- URGENCY & MOTIVATION STATUS CARD -->
+          <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-5 border border-amber-200 shadow-sm">
+            <div class="flex items-center gap-3 mb-2">
+              <i data-lucide="shield-alert" class="w-5 h-5 text-amber-600"></i>
+              <h3 class="font-bold text-sm text-amber-950 font-heading">Procrastination Panic Radar</h3>
+            </div>
+            <p class="text-xs text-amber-900 leading-relaxed mb-3">
+              Your Physics set has only <strong>18 hours remaining</strong>. If you wait until 10 PM tonight, panic will set in. Tackle 2 doubts right now!
+            </p>
+            <div class="w-full bg-amber-200/70 rounded-full h-2 overflow-hidden">
+              <div class="bg-amber-600 h-2 rounded-full transition-all" style="width: 75%"></div>
+            </div>
+            <div class="flex justify-between items-center text-[10px] text-amber-800 font-semibold mt-1.5">
+              <span>Time Slipping: High Urgency</span>
+              <span>75% of window passed</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- SCREEN 2: POST DOUBTS & STEP-BY-STEP SOLVER -->
+    <!-- ========================================== -->
+    <section id="screen-2" class="hidden transition-opacity duration-300">
+      
+      <!-- Screen 2 Top Banner -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center shadow-md shadow-brand-500/20">
+            <i data-lucide="help-circle" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 px-2.5 py-0.5 rounded-full border border-brand-200">Screen 2 &middot; Socratic Guidance</span>
+              <span class="text-xs text-slate-400 font-mono">Spoiler-Free Guarantee</span>
+            </div>
+            <h1 class="text-2xl font-bold font-heading text-slate-900">Post Homework Doubts & Scan Questions</h1>
+            <p class="text-xs text-slate-500">We guide you step-by-step with hints and formulas. No direct answers so you actually learn!</p>
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex items-center gap-2 self-stretch md:self-auto">
+          <button onclick="switchScreen(1)" class="flex-1 md:flex-initial px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            Back to Calendar
+          </button>
+          <button onclick="switchScreen(3)" class="flex-1 md:flex-initial px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 flex items-center justify-center gap-1.5">
+            <span>Coach Feedback</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Solver Layout: Input & Camera Scan on Left, Step-by-Step on Right -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- LEFT: QUESTION POSTING & IMAGE SCANNER -->
+        <div class="lg:col-span-5 space-y-6">
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+            <h2 class="text-lg font-bold font-heading text-slate-900 mb-1 flex items-center gap-2">
+              <i data-lucide="edit-3" class="w-5 h-5 text-brand-600"></i>
+              What question are you stuck on?
+            </h2>
+            <p class="text-xs text-slate-500 mb-4">Type the text or snap/upload a picture of your textbook or worksheet.</p>
+
+            <!-- Mode Selector Tabs: Type vs Scan Image -->
+            <div class="flex rounded-xl bg-slate-100 p-1 mb-4 text-xs font-semibold">
+              <button id="input-mode-text-btn" onclick="toggleInputMode('text')" class="flex-1 py-1.5 rounded-lg bg-white text-brand-700 shadow-sm flex items-center justify-center gap-1.5">
+                <i data-lucide="type" class="w-3.5 h-3.5"></i>
+                Type Question
+              </button>
+              <button id="input-mode-scan-btn" onclick="toggleInputMode('scan')" class="flex-1 py-1.5 rounded-lg text-slate-600 hover:text-brand-700 flex items-center justify-center gap-1.5">
+                <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                Scan / Upload Image
+              </button>
+            </div>
+
+            <!-- Form Container -->
+            <form id="post-question-form" onsubmit="handleQuestionSubmission(event)" class="space-y-4">
+              
+              <!-- Subject Dropdown -->
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Subject</label>
+                <select id="doubt-subject-select" class="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                  <option value="Math">Calculus / Mathematics</option>
+                  <option value="Physics">Physics / Mechanics</option>
+                  <option value="Chemistry">Chemistry / Molecular</option>
+                  <option value="ComputerScience">Computer Science / Coding</option>
+                  <option value="Literature">Literature / Essay Arguments</option>
+                </select>
+              </div>
+
+              <!-- TEXT INPUT PANE -->
+              <div id="text-input-pane" class="space-y-2">
+                <label class="block text-xs font-medium text-slate-600">Question or Problem Statement</label>
+                <textarea id="doubt-text-input" rows="4" placeholder="e.g. Find the derivative of f(x) = (3x^2 + 5) / (2x - 1) with respect to x. I'm confused about which quotient rule term comes first." class="w-full text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 leading-relaxed resize-none"></textarea>
+              </div>
+
+              <!-- IMAGE SCAN / UPLOAD PANE -->
+              <div id="scan-input-pane" class="space-y-3 hidden">
+                <label class="block text-xs font-medium text-slate-600">Snap or Upload Homework Image</label>
+                
+                <!-- Dropzone / Camera Trigger -->
+                <div id="dropzone-area" class="border-2 border-dashed border-slate-300 rounded-xl p-5 text-center hover:border-brand-500 hover:bg-brand-50/30 transition-all cursor-pointer relative group">
+                  <input type="file" id="image-file-input" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleImageSelected(event)">
+                  <div class="flex flex-col items-center justify-center space-y-2">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 group-hover:bg-brand-100 group-hover:text-brand-600 text-slate-500 flex items-center justify-center transition-colors">
+                      <i data-lucide="scan" class="w-6 h-6"></i>
+                    </div>
+                    <div class="text-xs font-semibold text-slate-700">
+                      <span class="text-brand-600">Click to upload</span> or drag and drop
+                    </div>
+                    <p class="text-[11px] text-slate-400">PNG, JPG, or WEBP up to 10MB</p>
+                  </div>
+                </div>
+
+                <!-- Live Camera Snapshot Feature (HTML5 MediaDevices) -->
+                <div class="flex items-center gap-2">
+                  <button type="button" onclick="startCameraScan()" class="flex-1 py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors">
+                    <i data-lucide="video" class="w-3.5 h-3.5"></i>
+                    Open Live Camera
+                  </button>
+                  <button type="button" onclick="loadSampleProblemImage()" class="flex-1 py-2 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors border border-amber-200">
+                    <i data-lucide="file-image" class="w-3.5 h-3.5 text-amber-600"></i>
+                    Use Sample Scan
+                  </button>
+                </div>
+
+                <!-- Camera Preview Modal/Container -->
+                <div id="camera-container" class="hidden rounded-xl overflow-hidden border border-slate-300 bg-black relative">
+                  <video id="camera-video" class="w-full h-44 object-cover" autoplay playsinline></video>
+                  <div class="absolute bottom-2 inset-x-2 flex justify-between">
+                    <button type="button" onclick="stopCamera()" class="px-3 py-1 bg-white/80 hover:bg-white text-xs font-semibold rounded-lg text-slate-800">Cancel</button>
+                    <button type="button" onclick="captureSnapshot()" class="px-4 py-1 bg-brand-600 hover:bg-brand-700 text-xs font-semibold rounded-lg text-white shadow">Snap Question</button>
+                  </div>
+                </div>
+
+                <!-- Selected Image Preview -->
+                <div id="image-preview-container" class="hidden p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-3">
+                  <img id="image-preview" src="" alt="Homework question preview" class="w-16 h-16 object-cover rounded-lg border border-slate-300">
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs font-semibold text-slate-800 truncate" id="image-filename">question_scan.jpg</p>
+                    <p class="text-[11px] text-emerald-600 font-medium flex items-center gap-1">
+                      <i data-lucide="check" class="w-3 h-3"></i> Image ready for OCR parsing
+                    </p>
+                  </div>
+                  <button type="button" onclick="clearSelectedImage()" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Quick Preset Doubts for quick testing -->
+              <div class="pt-2">
+                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-2">Or load a sample struggle:</span>
+                <div class="flex flex-wrap gap-1.5">
+                  <button type="button" onclick="loadSamplePreset('calculus')" class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-600 transition-colors">
+                    &int; Calculus Quotient Rule
+                  </button>
+                  <button type="button" onclick="loadSamplePreset('physics')" class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-600 transition-colors">
+                    &Delta; Newton's Friction on Incline
+                  </button>
+                  <button type="button" onclick="loadSamplePreset('chemistry')" class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-600 transition-colors">
+                    &Phi; Stoichiometry Limiting Reagent
+                  </button>
+                </div>
+              </div>
+
+              <!-- SUBMIT BUTTON -->
+              <button type="submit" id="submit-question-btn" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-brand-600 via-indigo-600 to-brand-700 hover:from-brand-700 hover:to-indigo-700 text-white font-bold text-sm shadow-md shadow-brand-500/25 hover:shadow-brand-500/40 transition-all flex items-center justify-center gap-2">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                <span id="submit-btn-text">Generate Step-by-Step Guidance</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Anti-Cheat / Non-Spoiler Guarantee Card -->
+          <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 text-amber-950 flex items-start gap-3">
+            <div class="p-2 rounded-xl bg-amber-100 text-amber-700 shrink-0">
+              <i data-lucide="shield-check" class="w-5 h-5"></i>
+            </div>
+            <div class="text-xs space-y-1">
+              <span class="font-bold">Why We Never Give The Final Answer:</span>
+              <p class="text-amber-900 leading-relaxed">
+                Copying answers from ChatGPT or Chegg creates a false sense of mastery that backfires on exam day. Homework Helpers guides you through the concepts and algebra so your own brain unlocks the solution!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: STEP-BY-STEP SOCRATIC GUIDANCE (NO FINAL SPOILERS) -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm min-h-[500px] flex flex-col justify-between">
+            
+            <div class="space-y-6">
+              <!-- Active Question Header -->
+              <div class="border-b border-slate-100 pb-4">
+                <div class="flex items-center justify-between mb-2">
+                  <span id="active-question-badge" class="px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-800 text-xs font-bold uppercase tracking-wider">
+                    Mathematics &middot; Calculus
+                  </span>
+                  <span class="text-xs text-slate-400 flex items-center gap-1">
+                    <i data-lucide="eye-off" class="w-3.5 h-3.5"></i> Final answer hidden
+                  </span>
+                </div>
+                <h3 id="active-question-display" class="text-base font-bold text-slate-800 font-heading leading-relaxed">
+                  "Find the derivative of f(x) = (3x² + 5) / (2x - 1). How do I apply the quotient rule without mixing up terms?"
+                </h3>
+              </div>
+
+              <!-- HINT PROGRESSION LADDER (Step 1, Step 2, Step 3, Step 4) -->
+              <div id="steps-container" class="space-y-4">
+                
+                <!-- Step 1 -->
+                <div class="step-card rounded-xl border border-slate-200 bg-slate-50/60 p-4 transition-all">
+                  <div class="flex items-start gap-3">
+                    <div class="w-7 h-7 rounded-full bg-brand-600 text-white font-bold text-xs flex items-center justify-center shrink-0">
+                      1
+                    </div>
+                    <div class="flex-1 space-y-1">
+                      <div class="flex items-center justify-between">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Step 1: Identify Key Formula & Components</h4>
+                        <span class="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+                          <i data-lucide="check-circle" class="w-3 h-3"></i> Unlocked
+                        </span>
+                      </div>
+                      <p class="text-xs text-slate-600 leading-relaxed">
+                        Notice you have a fraction \(\frac{u(x)}{v(x)}\). The Quotient Rule states:
+                        <span class="block my-1.5 p-2 bg-white rounded-lg border border-slate-200 font-mono text-slate-800 font-semibold text-center">
+                          f'(x) = [ u'(x) &middot; v(x) &minus; u(x) &middot; v'(x) ] / [ v(x) ]²
+                        </span>
+                        A handy memory trick: <em>"Low d-High minus High d-Low, over the square of what's below!"</em>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-card rounded-xl border border-slate-200 bg-slate-50/60 p-4 transition-all">
+                  <div class="flex items-start gap-3">
+                    <div class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shrink-0">
+                      2
+                    </div>
+                    <div class="flex-1 space-y-1">
+                      <div class="flex items-center justify-between">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Step 2: Differentiate Each Part Separately</h4>
+                        <span class="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+                          <i data-lucide="check-circle" class="w-3 h-3"></i> Unlocked
+                        </span>
+                      </div>
+                      <p class="text-xs text-slate-600 leading-relaxed">
+                        Break it into sub-tasks before combining:
+                      </p>
+                      <ul class="text-xs text-slate-600 space-y-1 list-disc list-inside bg-white p-2.5 rounded-lg border border-slate-200">
+                        <li>Top function \(u(x) = 3x^2 + 5\) &rarr; Derivative \(u'(x) = 6x\)</li>
+                        <li>Bottom function \(v(x) = 2x - 1\) &rarr; Derivative \(v'(x) = 2\)</li>
+                        <li>Bottom squared \([v(x)]^2 = (2x - 1)^2\)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 3: Interactive checkpoint -->
+                <div id="step-3-card" class="step-card rounded-xl border border-indigo-200 bg-indigo-50/30 p-4 transition-all">
+                  <div class="flex items-start gap-3">
+                    <div class="w-7 h-7 rounded-full bg-amber-500 text-white font-bold text-xs flex items-center justify-center shrink-0">
+                      3
+                    </div>
+                    <div class="flex-1 space-y-2">
+                      <div class="flex items-center justify-between">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-950">Step 3: Assemble & Expand the Numerator</h4>
+                        <span class="text-[11px] text-amber-700 font-bold px-2 py-0.5 rounded bg-amber-100">Guided Checkpoint</span>
+                      </div>
+                      <p class="text-xs text-slate-700 leading-relaxed">
+                        Substitute into the formula:
+                        <span class="block my-1.5 p-2 bg-white rounded-lg border border-indigo-100 font-mono text-slate-800 text-center">
+                          Numerator = (6x)(2x - 1) &minus; (3x² + 5)(2)
+                        </span>
+                        Multiply out both terms carefully:
+                        <br>&bull; Term 1: \(6x \times 2x = 12x^2\) and \(6x \times (-1) = -6x\)
+                        <br>&bull; Term 2: \(2 \times 3x^2 = 6x^2\) and \(2 \times 5 = 10\). Don't forget to distribute the negative sign!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 4: The Final Brain Teaser / Challenge (NO DIRECT ANSWER) -->
+                <div class="step-card rounded-xl border-2 border-dashed border-amber-300 bg-amber-50/50 p-4 transition-all">
+                  <div class="flex items-start gap-3">
+                    <div class="w-7 h-7 rounded-full bg-amber-600 text-white font-bold text-xs flex items-center justify-center shrink-0">
+                      4
+                    </div>
+                    <div class="flex-1 space-y-2">
+                      <div class="flex items-center justify-between">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-amber-900">Step 4: Your Turn! (The Final Step)</h4>
+                        <span class="text-[11px] text-amber-800 font-mono font-bold">Earn +50 Bonus Pts</span>
+                      </div>
+                      <p class="text-xs text-amber-950 leading-relaxed">
+                        Subtract \((6x^2 + 10)\) from \((12x^2 - 6x)\). Combine like terms for the numerator, and place it over \((2x - 1)^2\).
+                      </p>
+                      
+                      <!-- Self-Verification Interactive Box -->
+                      <div class="mt-3 p-3 bg-white rounded-xl border border-amber-200 space-y-2">
+                        <label class="block text-xs font-semibold text-slate-700">
+                          What is your simplified numerator? Test your answer:
+                        </label>
+                        <div class="flex gap-2">
+                          <input type="text" id="student-answer-test" placeholder="e.g. 6x^2 - 6x - 10" class="flex-1 text-xs px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 font-mono">
+                          <button type="button" onclick="verifyStudentThinking()" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs transition-colors shadow-sm">
+                            Check My Thinking
+                          </button>
+                        </div>
+                        <div id="answer-feedback-msg" class="hidden text-xs font-semibold pt-1"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Bottom Action: Send Work to Screen 3 (Coach Evaluation) -->
+            <div class="mt-6 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div class="flex items-center gap-2 text-xs text-slate-500">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+                <span>Completed steps logged to your session profile</span>
+              </div>
+              <button onclick="proceedToCoachWithWork()" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md shadow-brand-500/20 flex items-center justify-center gap-2">
+                <span>See Coach's Critique & Claim Bonus Points</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- SCREEN 3: CRITIQUE, COMMENT & ENCOURAGEMENT -->
+    <!-- ========================================== -->
+    <section id="screen-3" class="hidden transition-opacity duration-300">
+      
+      <!-- Top Overview Banner -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center shadow-md shadow-amber-500/25">
+            <i data-lucide="award" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">Screen 3 &middot; Tough Love & Encouragement</span>
+              <span class="text-xs text-emerald-600 font-semibold flex items-center gap-1">
+                <i data-lucide="check" class="w-3 h-3"></i> Points Vault Ready
+              </span>
+            </div>
+            <h1 class="text-2xl font-bold font-heading text-slate-900">Your Anti-Procrastination Coach</h1>
+            <p class="text-xs text-slate-500">Constructive feedback on your study session, streak boosts, and encouragement to keep going.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="switchScreen(1)" class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center gap-1.5">
+            <i data-lucide="calendar" class="w-4 h-4"></i>
+            Calendar
+          </button>
+          <button onclick="switchScreen(2)" class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center gap-1.5">
+            <i data-lucide="help-circle" class="w-4 h-4"></i>
+            Another Doubt
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- LEFT COLUMN: THE CRITIQUE & COMMENTARY CARD -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- Coach AI Commentary Box -->
+          <div class="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-sm relative overflow-hidden">
+            <!-- Decorative Accent -->
+            <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-400 via-brand-500 to-emerald-500"></div>
+
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow">
+                  <i data-lucide="bot" class="w-5 h-5 text-amber-400"></i>
+                </div>
+                <div>
+                  <h2 class="text-lg font-bold font-heading text-slate-900">Coach's Honest Critique</h2>
+                  <p class="text-xs text-slate-500">Live reflection on your study habits & procrastination patterns</p>
+                </div>
+              </div>
+              <span class="text-xs font-mono px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 font-semibold" id="critique-timestamp">
+                Today at 5:50 PM
+              </span>
+            </div>
+
+            <!-- Dynamic Critique Narrative -->
+            <div class="space-y-4 text-slate-700 text-sm leading-relaxed" id="coach-critique-text">
+              <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                <div class="flex items-center gap-2 text-amber-800 font-bold text-xs uppercase tracking-wider">
+                  <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600"></i>
+                  The Reality Check (Constructive Critique)
+                </div>
+                <p class="text-xs text-slate-700">
+                  "Let's be real: you put off this assignment until the 11th hour because seeing that huge formula made your brain look for a dopamine distraction (hello phone scroll). Procrastination isn't laziness—it's anxiety about not knowing where to begin."
+                </p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2">
+                <div class="flex items-center gap-2 text-emerald-800 font-bold text-xs uppercase tracking-wider">
+                  <i data-lucide="heart-handshake" class="w-4 h-4 text-emerald-600"></i>
+                  The Encouragement (What you did great)
+                </div>
+                <p class="text-xs text-emerald-950">
+                  "Here is where you won: instead of letting panic lead you to a shady answer-copying site, you sat down, broke the derivative into numerator and denominator steps, and solved the tough algebraic middle. You proved to yourself you have the chops to do this."
+                </p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-brand-50 border border-brand-200 space-y-2">
+                <div class="flex items-center gap-2 text-brand-800 font-bold text-xs uppercase tracking-wider">
+                  <i data-lucide="target" class="w-4 h-4 text-brand-600"></i>
+                  Next 30 Minutes Action Plan
+                </div>
+                <p class="text-xs text-brand-950">
+                  "Finish question #2 right now while your brain is warmed up. Don't leave your chair until you check it off the calendar on Screen 1. You are 70% closer to a homework-free evening!"
+                </p>
+              </div>
+            </div>
+
+            <!-- Generate Fresh Critique Button -->
+            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-xs text-slate-400">Need another nudge?</span>
+              <button onclick="generateFreshCritique()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                Regenerate Coach Advice
+              </button>
+            </div>
+          </div>
+
+          <!-- Anti-Procrastination "5-Minute Focus Blast" Timer -->
+          <div class="bg-gradient-to-r from-indigo-900 to-purple-900 text-white rounded-2xl p-6 shadow-md border border-white/10">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center text-amber-300">
+                  <i data-lucide="hourglass" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold font-heading text-base">5-Minute Procrastination Buster</h3>
+                  <p class="text-xs text-indigo-200">Just commit to 5 minutes of focused work. Then you can stop.</p>
+                </div>
+              </div>
+              <div class="font-mono text-2xl font-black text-amber-300" id="focus-timer-display">
+                05:00
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button id="focus-timer-btn" onclick="toggleFocusTimer()" class="flex-1 py-2.5 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs transition-colors flex items-center justify-center gap-2">
+                <i data-lucide="play" class="w-4 h-4 fill-slate-950" id="timer-btn-icon"></i>
+                <span id="timer-btn-label">Start 5-Minute Sprint</span>
+              </button>
+              <button onclick="resetFocusTimer()" class="py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs transition-colors">
+                Reset
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN: BONUS POINTS, REWARDS VAULT & STREAKS -->
+        <div class="lg:col-span-5 space-y-6">
+          
+          <!-- Bonus Points Card with Confetti Trigger -->
+          <div class="bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500 rounded-2xl p-6 text-slate-950 shadow-xl shadow-amber-500/20 relative overflow-hidden">
+            <div class="absolute -right-8 -bottom-8 w-36 h-36 bg-white/20 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-black uppercase tracking-wider bg-black/15 px-3 py-1 rounded-full text-slate-900 border border-black/10">
+                Bonus Points Vault
+              </span>
+              <div class="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+                <i data-lucide="flame" class="w-4 h-4 fill-slate-950"></i>
+                <span id="streak-count">4 Day Streak</span>
+              </div>
+            </div>
+
+            <div class="space-y-1 mb-4">
+              <div class="text-4xl sm:text-5xl font-black tracking-tight font-heading" id="total-points-display">
+                120
+              </div>
+              <div class="text-xs font-bold text-amber-950 uppercase tracking-wider">
+                Total Encouragement Points Earned
+              </div>
+            </div>
+
+            <p class="text-xs text-amber-950/90 leading-relaxed mb-5">
+              Every hint you think through and every homework you tick off earns bonus points to keep your dopamine flowing without picking up your phone!
+            </p>
+
+            <!-- Claim Bonus Button -->
+            <button onclick="claimEncouragementBonus()" class="w-full py-3 px-4 rounded-xl bg-slate-950 hover:bg-slate-900 text-white font-bold text-xs shadow-lg transition-all flex items-center justify-center gap-2 group">
+              <i data-lucide="sparkles" class="w-4 h-4 text-amber-400 group-hover:rotate-45 transition-transform"></i>
+              <span>Claim +30 Encouragement Bonus Now!</span>
+            </button>
+          </div>
+
+          <!-- Student Level & Badges -->
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm font-heading">Level 2: Momentum Builder</h3>
+                <p class="text-xs text-slate-500">80 pts to Level 3: Procrastination Slayer</p>
+              </div>
+              <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">
+                Lv. 2
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+              <div id="level-progress-bar" class="bg-gradient-to-r from-brand-500 to-amber-500 h-2.5 rounded-full transition-all duration-500" style="width: 60%"></div>
+            </div>
+
+            <!-- Badges Unlocked -->
+            <div class="pt-3 border-t border-slate-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-3">Badges Unlocked</span>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
+                  <span class="text-lg">🛡️</span>
+                  <div>
+                    <div class="font-bold text-slate-800">No Spoilers</div>
+                    <div class="text-[10px] text-slate-500">Solved without cheating</div>
+                  </div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
+                  <span class="text-lg">⚡</span>
+                  <div>
+                    <div class="font-bold text-slate-800">5-Min Starter</div>
+                    <div class="text-[10px] text-slate-500">Broke inertia today</div>
+                  </div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
+                  <span class="text-lg">📅</span>
+                  <div>
+                    <div class="font-bold text-slate-800">Calendar Master</div>
+                    <div class="text-[10px] text-slate-500">Checked off first task</div>
+                  </div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-amber-50/70 border border-amber-200 flex items-center gap-2">
+                  <span class="text-lg">🔥</span>
+                  <div>
+                    <div class="font-bold text-amber-900">Streak Legend</div>
+                    <div class="text-[10px] text-amber-700">4 days consistent</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Next Action Link: Back to Calendar Check-off -->
+          <div class="p-4 rounded-xl bg-slate-100 border border-slate-200 text-center">
+            <p class="text-xs text-slate-600 mb-2">Ready to mark your homework as finished?</p>
+            <button onclick="switchScreen(1)" class="w-full py-2 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-colors flex items-center justify-center gap-1.5">
+              <i data-lucide="check" class="w-3.5 h-3.5"></i>
+              Go to Screen 1 & Check Off Homework
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- AUDIO SYNTHESIZER FOR REWARD CHIMES & SOUND EFFECTS (ZERO DEPENDENCIES) -->
+  <script>
+    // Audio context for sound effects without external audio files
+    let audioCtx = null;
+    function playChime(type = 'success') {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'success') {
+          // Cheerful major chord arpeggio
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+          osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+          osc.frequency.setValueAtTime(1046.50, now + 0.24); // C6
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+          osc.start(now);
+          osc.stop(now + 0.5);
+        } else if (type === 'bonus') {
+          // High-energy power-up sound
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.25);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else if (type === 'tick') {
+          // Soft click
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(800, now);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+          osc.start(now);
+          osc.stop(now + 0.06);
+        }
+      } catch (e) {
+        console.log('Audio feedback not available', e);
+      }
+    }
+  </script>
+
+  <!-- APPLICATION CORE LOGIC -->
+  <script>
+    // Initial State & Local Storage Key
+    const STORAGE_KEY = 'homework_helpers_app_data';
+
+    // Seed Data representing our procrastinating student
+    const defaultData = {
+      points: 120,
+      streak: 4,
+      homeworks: [
+        {
+          id: 'hw-1',
+          title: 'Physics: Electromagnetism Problem Set',
+          subject: 'Physics',
+          date: '2026-11-21',
+          effort: 'Heavy Boulder (2+ hours)',
+          completed: false,
+          notes: 'Right hand rule and Faraday induction'
+        },
+        {
+          id: 'hw-2',
+          title: 'Calculus: Chain Rule & Quotient Rule Sheet',
+          subject: 'Mathematics',
+          date: '2026-11-22',
+          effort: 'Moderate (45 min)',
+          completed: true,
+          notes: 'Exercise 4.2 questions 1-10'
+        },
+        {
+          id: 'hw-3',
+          title: 'Chemistry: Balancing Redox Reactions',
+          subject: 'Chemistry',
+          date: '2026-11-24',
+          effort: 'Moderate (45 min)',
+          completed: false,
+          notes: 'Acidic medium half-reaction method'
+        },
+        {
+          id: 'hw-4',
+          title: 'History: Causes of Industrial Revolution Essay',
+          subject: 'Literature & History',
+          date: '2026-11-26',
+          effort: 'Heavy Boulder (2+ hours)',
+          completed: false,
+          notes: 'Needs 3 primary sources cited'
+        }
+      ]
+    };
+
+    let appState = loadState();
+    let currentCalMonth = 10; // November (0-indexed)
+    let currentCalYear = 2026;
+    let cameraStream = null;
+
+    function loadState() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) return JSON.parse(stored);
+      } catch (e) {
+        console.error('Failed to load state from localStorage', e);
+      }
+      return defaultData;
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        console.error('Failed to save state to localStorage', e);
+      }
+      updateUI();
+    }
+
+    // SCREEN SWITCHER (Screen 1, 2, 3)
+    function switchScreen(screenNum) {
+      playChime('tick');
+      // Hide all screens
+      document.getElementById('screen-1').classList.add('hidden');
+      document.getElementById('screen-2').classList.add('hidden');
+      document.getElementById('screen-3').classList.add('hidden');
+
+      // Update Top Nav button styling
+      const navBtns = [
+        document.getElementById('nav-screen-1'),
+        document.getElementById('nav-screen-2'),
+        document.getElementById('nav-screen-3')
+      ];
+
+      navBtns.forEach((btn, index) => {
+        if (index + 1 === screenNum) {
+          btn.className = 'px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all bg-white text-brand-700 shadow-sm font-bold';
+        } else {
+          btn.className = 'px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all text-slate-600 hover:text-brand-600';
+        }
+      });
+
+      // Show active screen
+      const targetScreen = document.getElementById(`screen-${screenNum}`);
+      targetScreen.classList.remove('hidden');
+      targetScreen.classList.add('opacity-0');
+      setTimeout(() => {
+        targetScreen.classList.remove('opacity-0');
+      }, 20);
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Refresh icons in case new elements rendered
+      lucide.createIcons();
+    }
+
+    // ==========================================
+    // SCREEN 1 LOGIC: CALENDAR & REMINDERS
+    // ==========================================
+    function updateUI() {
+      // Header and cards point display
+      document.getElementById('header-points-display').textContent = `${appState.points} pts`;
+      document.getElementById('total-points-display').textContent = appState.points;
+      document.getElementById('streak-count').textContent = `${appState.streak} Day Streak`;
+
+      // Level Progress calculation
+      const levelPts = appState.points % 100;
+      const progressPercent = Math.min(100, Math.max(10, (levelPts / 100) * 100));
+      document.getElementById('level-progress-bar').style.width = `${progressPercent}%`;
+
+      // Render Calendar & Homework Checklist
+      renderCalendar();
+      renderChecklist();
+      updateNextUpcomingHomework();
+    }
+
+    function updateNextUpcomingHomework() {
+      // Find incomplete homework with closest date
+      const incomplete = appState.homeworks
+        .filter(hw => !hw.completed)
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      if (incomplete.length > 0) {
+        const next = incomplete[0];
+        document.getElementById('next-hw-title').textContent = next.title;
+        
+        const hwDate = new Date(next.date + 'T23:59:59');
+        const now = new Date('2026-11-20T17:50:20'); // Using current context time
+        const diffMs = hwDate - now;
+        const diffHours = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60)));
+        const diffDays = Math.floor(diffHours / 24);
+
+        let countdownText = `Due in ${diffHours}h`;
+        if (diffDays > 0) {
+          countdownText = `Due in ${diffDays}d ${diffHours % 24}h`;
+        }
+
+        const dateFormatted = hwDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        document.getElementById('next-hw-date').textContent = dateFormatted;
+        document.getElementById('next-hw-countdown').textContent = countdownText;
+      } else {
+        document.getElementById('next-hw-title').textContent = 'All caught up! Zero pending homework 🎉';
+        document.getElementById('next-hw-date').textContent = 'Enjoy your break!';
+        document.getElementById('next-hw-countdown').textContent = 'No Panic';
+      }
+    }
+
+    function renderChecklist() {
+      const container = document.getElementById('homework-checklist-container');
+      container.innerHTML = '';
+
+      const completed = appState.homeworks.filter(h => h.completed).length;
+      document.getElementById('completed-count-badge').textContent = `${completed} / ${appState.homeworks.length} Done`;
+
+      if (appState.homeworks.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">No homework added yet! Add one below.</div>`;
+        return;
+      }
+
+      // Sort by incomplete first, then date
+      const sorted = [...appState.homeworks].sort((a, b) => {
+        if (a.completed !== b.completed) return a.completed ? 1 : -1;
+        return new Date(a.date) - new Date(b.date);
+      });
+
+      sorted.forEach(hw => {
+        const item = document.createElement('div');
+        item.className = `p-3.5 rounded-xl border transition-all flex items-start justify-between gap-3 ${
+          hw.completed 
+            ? 'bg-slate-50 border-slate-200 opacity-60' 
+            : 'bg-white border-slate-200 hover:border-brand-300 shadow-sm'
+        }`;
+
+        item.innerHTML = `
+          <div class="flex items-start gap-3 flex-1 min-w-0">
+            <input 
+              type="checkbox" 
+              ${hw.completed ? 'checked' : ''} 
+              onchange="toggleHomeworkComplete('${hw.id}')"
+              class="mt-1 w-4 h-4 rounded text-brand-600 focus:ring-brand-500 cursor-pointer accent-brand-600"
+            >
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold ${hw.completed ? 'line-through text-slate-400' : 'text-slate-800'} truncate">
+                  ${hw.title}
+                </span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded font-semibold ${getSubjectBadgeColor(hw.subject)}">
+                  ${hw.subject}
+                </span>
+              </div>
+              <div class="flex items-center gap-2 text-[11px] text-slate-500 mt-1">
+                <span class="flex items-center gap-1">
+                  <i data-lucide="clock" class="w-3 h-3 text-slate-400"></i>
+                  Due: ${hw.date}
+                </span>
+                <span>&middot;</span>
+                <span class="text-slate-400">${hw.effort}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1 shrink-0">
+            <button onclick="askDoubtForHw('${hw.title}', '${hw.subject}')" title="Ask question about this homework on Screen 2" class="p-1.5 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-colors">
+              <i data-lucide="help-circle" class="w-4 h-4"></i>
+            </button>
+            <button onclick="deleteHomework('${hw.id}')" title="Delete homework" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-colors">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+
+      lucide.createIcons();
+    }
+
+    function getSubjectBadgeColor(subject) {
+      switch (subject) {
+        case 'Mathematics': return 'bg-purple-100 text-purple-700';
+        case 'Physics': return 'bg-amber-100 text-amber-700';
+        case 'Chemistry': return 'bg-emerald-100 text-emerald-700';
+        case 'Computer Science': return 'bg-cyan-100 text-cyan-700';
+        default: return 'bg-slate-100 text-slate-700';
+      }
+    }
+
+    function toggleHomeworkComplete(id) {
+      const hw = appState.homeworks.find(h => h.id === id);
+      if (hw) {
+        hw.completed = !hw.completed;
+        if (hw.completed) {
+          appState.points += 40;
+          playChime('success');
+          confetti({
+            particleCount: 75,
+            spread: 60,
+            origin: { y: 0.7 }
+          });
+        } else {
+          appState.points = Math.max(0, appState.points - 40);
+        }
+        saveState();
+      }
+    }
+
+    function deleteHomework(id) {
+      appState.homeworks = appState.homeworks.filter(h => h.id !== id);
+      saveState();
+    }
+
+    function handleAddNewHomework(e) {
+      e.preventDefault();
+      const title = document.getElementById('hw-title-input').value.trim();
+      const subject = document.getElementById('hw-subject-input').value;
+      const date = document.getElementById('hw-date-input').value;
+      const effort = document.getElementById('hw-effort-input').value;
+
+      if (!title || !date) return;
+
+      const newHw = {
+        id: 'hw-' + Date.now(),
+        title,
+        subject,
+        date,
+        effort,
+        completed: false
+      };
+
+      appState.homeworks.push(newHw);
+      appState.points += 15; // Reward for registering and organizing homework!
+      saveState();
+
+      document.getElementById('hw-title-input').value = '';
+      playChime('bonus');
+    }
+
+    function askDoubtForHw(title, subject) {
+      document.getElementById('doubt-text-input').value = `I am stuck on my homework: "${title}". Can you give me step-by-step guidance on how to tackle the main concept without revealing the final answer?`;
+      if (subject.includes('Math')) document.getElementById('doubt-subject-select').value = 'Math';
+      else if (subject.includes('Physics')) document.getElementById('doubt-subject-select').value = 'Physics';
+      else if (subject.includes('Chemistry')) document.getElementById('doubt-subject-select').value = 'Chemistry';
+      switchScreen(2);
+    }
+
+    // CALENDAR RENDERING
+    function renderCalendar() {
+      const grid = document.getElementById('calendar-grid');
+      grid.innerHTML = '';
+
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      document.getElementById('calendar-month-year').textContent = `${monthNames[currentCalMonth]} ${currentCalYear}`;
+
+      const firstDayIndex = new Date(currentCalYear, currentCalMonth, 1).getDay();
+      const daysInMonth = new Date(currentCalYear, currentCalMonth + 1, 0).getDate();
+
+      // Empty padding cells for start of month
+      for (let i = 0; i < firstDayIndex; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'h-16 sm:h-20 p-1 bg-slate-50/50 rounded-lg border border-transparent';
+        grid.appendChild(emptyCell);
+      }
+
+      // Current mock context date is Nov 20, 2026
+      const todayYear = 2026;
+      const todayMonth = 10; // Nov
+      const todayDay = 20;
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const cell = document.createElement('div');
+        const dateStr = `${currentCalYear}-${String(currentCalMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        
+        // Find homeworks due on this date
+        const dueHws = appState.homeworks.filter(h => h.date === dateStr);
+        const isToday = (currentCalYear === todayYear && currentCalMonth === todayMonth && d === todayDay);
+
+        cell.className = `h-16 sm:h-20 p-1.5 rounded-lg border transition-all flex flex-col justify-between ${
+          isToday 
+            ? 'border-brand-500 bg-brand-50/40 ring-1 ring-brand-500' 
+            : dueHws.length > 0 
+              ? 'border-slate-200 bg-white hover:border-brand-300' 
+              : 'border-slate-100 bg-white hover:bg-slate-50'
+        }`;
+
+        let dotsHtml = '';
+        if (dueHws.length > 0) {
+          dotsHtml = '<div class="space-y-1 overflow-hidden">';
+          dueHws.forEach(hw => {
+            const dotColor = hw.completed 
+              ? 'bg-emerald-500 text-emerald-950' 
+              : isToday || d === todayDay + 1 
+                ? 'bg-rose-500 text-white' 
+                : 'bg-amber-500 text-slate-950';
+            dotsHtml += `
+              <div title="${hw.title} (${hw.completed ? 'Done' : 'Pending'})" class="text-[9px] font-semibold px-1 py-0.5 rounded truncate ${dotColor}">
+                ${hw.completed ? '✓ ' : ''}${hw.title}
+              </div>
+            `;
+          });
+          dotsHtml += '</div>';
+        }
+
+        cell.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold ${isToday ? 'text-brand-700 bg-brand-100 px-1.5 py-0.5 rounded-full' : 'text-slate-600'}">
+              ${d}
+            </span>
+            ${isToday ? '<span class="text-[8px] uppercase tracking-wider font-bold text-brand-600">Today</span>' : ''}
+          </div>
+          ${dotsHtml}
+        `;
+
+        // Click to quickly populate add homework date
+        cell.onclick = () => {
+          document.getElementById('hw-date-input').value = dateStr;
+          document.getElementById('hw-title-input').focus();
+        };
+
+        grid.appendChild(cell);
+      }
+    }
+
+    function changeCalendarMonth(offset) {
+      currentCalMonth += offset;
+      if (currentCalMonth > 11) {
+        currentCalMonth = 0;
+        currentCalYear++;
+      } else if (currentCalMonth < 0) {
+        currentCalMonth = 11;
+        currentCalYear--;
+      }
+      renderCalendar();
+    }
+
+    // ==========================================
+    // SCREEN 2 LOGIC: DOUBT POSTING & STEP SOLVER
+    // ==========================================
+    function toggleInputMode(mode) {
+      const textBtn = document.getElementById('input-mode-text-btn');
+      const scanBtn = document.getElementById('input-mode-scan-btn');
+      const textPane = document.getElementById('text-input-pane');
+      const scanPane = document.getElementById('scan-input-pane');
+
+      if (mode === 'text') {
+        textBtn.className = 'flex-1 py-1.5 rounded-lg bg-white text-brand-700 shadow-sm flex items-center justify-center gap-1.5';
+        scanBtn.className = 'flex-1 py-1.5 rounded-lg text-slate-600 hover:text-brand-700 flex items-center justify-center gap-1.5';
+        textPane.classList.remove('hidden');
+        scanPane.classList.add('hidden');
+      } else {
+        scanBtn.className = 'flex-1 py-1.5 rounded-lg bg-white text-brand-700 shadow-sm flex items-center justify-center gap-1.5';
+        textBtn.className = 'flex-1 py-1.5 rounded-lg text-slate-600 hover:text-brand-700 flex items-center justify-center gap-1.5';
+        textPane.classList.add('hidden');
+        scanPane.classList.remove('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    // Preset samples
+    const sampleProblems = {
+      calculus: {
+        subject: 'Math',
+        question: "Find the derivative of f(x) = (3x² + 5) / (2x - 1). How do I apply the quotient rule without mixing up terms?",
+        steps: [
+          {
+            num: 1,
+            title: "Step 1: Identify Key Formula & Components",
+            text: "Notice this is a quotient \\(\\frac{u(x)}{v(x)}\\). The Quotient Rule is \\(f'(x) = \\frac{u'v - uv'}{v^2}\\). Mnemonic: <em>'Low d-High minus High d-Low, over the square of what's below!'</em>"
+          },
+          {
+            num: 2,
+            title: "Step 2: Differentiate Each Component Individually",
+            text: "Identify \\(u = 3x^2 + 5 \\implies u' = 6x\\). And \\(v = 2x - 1 \\implies v' = 2\\). Bottom squared is \\((2x - 1)^2\\)."
+          },
+          {
+            num: 3,
+            title: "Step 3: Setup the Numerator Expression",
+            text: "Assemble: \\((6x)(2x - 1) - (3x^2 + 5)(2)\\). Expand the brackets: \\(12x^2 - 6x - (6x^2 + 10)\\)."
+          },
+          {
+            num: 4,
+            title: "Step 4: Your Turn! (The Final Step)",
+            text: "Combine like terms for the numerator: \\((12x^2 - 6x) - (6x^2 + 10)\\). Do not look for shortcuts—what simplified quadratic do you get on top?",
+            expected: "6x^2 - 6x - 10"
+          }
+        ]
+      },
+      physics: {
+        subject: 'Physics',
+        question: "A 5 kg block rests on a 30° ramp with coefficient of friction μ = 0.2. What is the net acceleration down the incline?",
+        steps: [
+          {
+            num: 1,
+            title: "Step 1: Break Down Forces Along the Incline",
+            text: "Align your coordinate system so the x-axis points down the slope. Gravity pulls downward with \\(F_g = mg\\). The component pulling down the ramp is \\(mg \\sin(30^\\circ)\\)."
+          },
+          {
+            num: 2,
+            title: "Step 2: Normal Force and Maximum Friction",
+            text: "The normal force perpendicular to the ramp is \\(N = mg \\cos(30^\\circ)\\). The opposing friction force is \\(f_k = \\mu N = 0.2 \\times mg \\cos(30^\\circ)\\)."
+          },
+          {
+            num: 3,
+            title: "Step 3: Net Force Equation",
+            text: "According to Newton's Second Law: \\(F_{\\text{net}} = mg \\sin(30^\\circ) - \\mu mg \\cos(30^\\circ) = ma\\). Notice the mass \\(m\\) cancels out on both sides!"
+          },
+          {
+            num: 4,
+            title: "Step 4: Your Turn! (The Final Step)",
+            text: "Evaluate \\(a = g (\\sin(30^\\circ) - 0.2 \\cos(30^\\circ))\\) using \\(g = 9.8 \\text{ m/s}^2\\), \\(\\sin(30^\\circ)=0.5\\), and \\(\\cos(30^\\circ) \\approx 0.866\\). Calculate the numerical acceleration!",
+            expected: "3.2"
+          }
+        ]
+      },
+      chemistry: {
+        subject: 'Chemistry',
+        question: "How do I determine the limiting reactant when 10g of H₂ reacts with 64g of O₂ to form water (2H₂ + O₂ → 2H₂O)?",
+        steps: [
+          {
+            num: 1,
+            title: "Step 1: Convert Grams to Moles First",
+            text: "Never compare grams directly because molecules have different masses! Molar mass of \\(H_2 \\approx 2.016 \\text{ g/mol}\\). Molar mass of \\(O_2 \\approx 32.00 \\text{ g/mol}\\)."
+          },
+          {
+            num: 2,
+            title: "Step 2: Calculate Available Moles",
+            text: "Moles of \\(H_2 = 10 / 2.016 \\approx 4.96 \\text{ mol}\\). Moles of \\(O_2 = 64 / 32 = 2.00 \\text{ mol}\\)."
+          },
+          {
+            num: 3,
+            title: "Step 3: Use the Stoichiometric Ratio",
+            text: "From \\(2H_2 + O_2 \\rightarrow 2H_2O\\), every 1 mole of \\(O_2\\) requires 2 moles of \\(H_2\\). For 2.00 moles of \\(O_2\\), you need \\(2 \\times 2.00 = 4.00 \\text{ moles of } H_2\\)."
+          },
+          {
+            num: 4,
+            title: "Step 4: Your Turn! (The Final Step)",
+            text: "You have 4.96 moles of \\(H_2\\), but only needed 4.00 moles. Which reactant runs out first, and how much excess is left over?",
+            expected: "O2"
+          }
+        ]
+      }
+    };
+
+    function loadSamplePreset(key) {
+      const preset = sampleProblems[key];
+      if (!preset) return;
+      document.getElementById('doubt-subject-select').value = preset.subject;
+      document.getElementById('doubt-text-input').value = preset.question;
+      toggleInputMode('text');
+      renderSteps(preset);
+      playChime('tick');
+    }
+
+    function handleImageSelected(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        document.getElementById('image-preview').src = evt.target.result;
+        document.getElementById('image-filename').textContent = file.name;
+        document.getElementById('image-preview-container').classList.remove('hidden');
+        document.getElementById('dropzone-area').classList.add('hidden');
+        playChime('tick');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearSelectedImage() {
+      document.getElementById('image-file-input').value = '';
+      document.getElementById('image-preview').src = '';
+      document.getElementById('image-preview-container').classList.add('hidden');
+      document.getElementById('dropzone-area').classList.remove('hidden');
+    }
+
+    function loadSampleProblemImage() {
+      // Simulate an uploaded homework scan of a physics problem
+      const sampleSvg = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="100%" height="100%" fill="%23f8fafc"/><text x="20" y="40" font-family="sans-serif" font-size="14" font-weight="bold" fill="%23334155">HW Question 4: Ramp Friction</text><text x="20" y="75" font-family="sans-serif" font-size="12" fill="%2364748b">m = 5 kg, theta = 30 deg, mu = 0.2</text><text x="20" y="105" font-family="sans-serif" font-size="12" fill="%2364748b">Find the acceleration down the incline.</text><polygon points="40,170 180,170 180,100" fill="%23cbd5e1" stroke="%2394a3b8"/><rect x="90" y="115" width="30" height="20" transform="rotate(-26 105 125)" fill="%23f59e0b"/></svg>`;
+      document.getElementById('image-preview').src = sampleSvg;
+      document.getElementById('image-filename').textContent = "physics_worksheet_problem_4.jpg";
+      document.getElementById('image-preview-container').classList.remove('hidden');
+      document.getElementById('dropzone-area').classList.add('hidden');
+      document.getElementById('doubt-subject-select').value = 'Physics';
+      document.getElementById('doubt-text-input').value = "Scanned Question: A 5 kg block slides down a 30° ramp with friction μ = 0.2. What is the net acceleration?";
+      playChime('tick');
+    }
+
+    // Camera APIs
+    async function startCameraScan() {
+      const container = document.getElementById('camera-container');
+      const video = document.getElementById('camera-video');
+      try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        video.srcObject = cameraStream;
+        container.classList.remove('hidden');
+        document.getElementById('dropzone-area').classList.add('hidden');
+      } catch (err) {
+        alert("Camera access not available or denied by browser. Using sample scan instead!");
+        loadSampleProblemImage();
+      }
+    }
+
+    function stopCamera() {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+      }
+      document.getElementById('camera-container').classList.add('hidden');
+      document.getElementById('dropzone-area').classList.remove('hidden');
+    }
+
+    function captureSnapshot() {
+      const video = document.getElementById('camera-video');
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 480;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+
+      const dataUrl = canvas.toDataURL('image/jpeg');
+      document.getElementById('image-preview').src = dataUrl;
+      document.getElementById('image-filename').textContent = "live_homework_snap.jpg";
+      document.getElementById('image-preview-container').classList.remove('hidden');
+      stopCamera();
+      document.getElementById('dropzone-area').classList.add('hidden');
+      playChime('tick');
+    }
+
+    function handleQuestionSubmission(e) {
+      e.preventDefault();
+      const questionText = document.getElementById('doubt-text-input').value.trim();
+      const subject = document.getElementById('doubt-subject-select').value;
+      const hasImage = !document.getElementById('image-preview-container').classList.contains('hidden');
+
+      if (!questionText && !hasImage) {
+        alert('Please enter a question or upload a photo of your homework!');
+        return;
+      }
+
+      const submitBtn = document.getElementById('submit-question-btn');
+      const submitText = document.getElementById('submit-btn-text');
+      submitBtn.disabled = true;
+      submitText.textContent = "Analyzing & Deconstructing...";
+
+      setTimeout(() => {
+        submitBtn.disabled = false;
+        submitText.textContent = "Generate Step-by-Step Guidance";
+
+        // Generate tailored non-spoiler response
+        generateStepsForQuestion(questionText || "Scanned Question from Worksheet", subject);
+
+        // Award points for asking doubts
+        appState.points += 20;
+        saveState();
+        playChime('bonus');
+      }, 700);
+    }
+
+    function generateStepsForQuestion(query, subject) {
+      // Check if matches known presets or build dynamic Socratic guidance
+      let matched = null;
+      if (query.toLowerCase().includes('quotient') || query.toLowerCase().includes('derivative')) {
+        matched = sampleProblems.calculus;
+      } else if (query.toLowerCase().includes('ramp') || query.toLowerCase().includes('incline') || query.toLowerCase().includes('friction')) {
+        matched = sampleProblems.physics;
+      } else if (query.toLowerCase().includes('limiting') || query.toLowerCase().includes('mole') || query.toLowerCase().includes('reagent')) {
+        matched = sampleProblems.chemistry;
+      } else {
+        // Dynamic generic Socratic template tailored to any query
+        matched = {
+          subject: subject,
+          question: query,
+          steps: [
+            {
+              num: 1,
+              title: "Step 1: Problem Deconstruction & Given Variables",
+              text: `Start by extracting what the problem explicitly tells you vs. what you need to solve for. Underline all quantities and state the target variable without guessing the final answer.`
+            },
+            {
+              num: 2,
+              title: "Step 2: Core Principle & Formula Recall",
+              text: `Connect this problem to the fundamental law or rule taught in class (e.g., Conservation Laws, Standard Derivative Rules, or Gram-Mole conversions). Write the formula down in its purest symbolic form.`
+            },
+            {
+              num: 3,
+              title: "Step 3: Intermediate Working Check",
+              text: `Plug in the known values into the equation. Isolate your unknown variable on the left side before touching the calculator. Check that your units match consistently!`
+            },
+            {
+              num: 4,
+              title: "Step 4: Your Turn! (The Final Step)",
+              text: `Perform the final evaluation step on your own paper. Look at the magnitude: does your answer make physical / mathematical sense? Once calculated, submit to Coach for points!`,
+              expected: ""
+            }
+          ]
+        };
+      }
+
+      renderSteps(matched);
+    }
+
+    function renderSteps(problemData) {
+      document.getElementById('active-question-badge').textContent = `${problemData.subject} • Socratic Steps`;
+      document.getElementById('active-question-display').textContent = `"${problemData.question}"`;
+
+      const container = document.getElementById('steps-container');
+      container.innerHTML = '';
+
+      problemData.steps.forEach(step => {
+        const isFinal = (step.num === 4);
+        const card = document.createElement('div');
+        
+        if (!isFinal) {
+          card.className = "step-card rounded-xl border border-slate-200 bg-slate-50/70 p-4 transition-all";
+          card.innerHTML = `
+            <div class="flex items-start gap-3">
+              <div class="w-7 h-7 rounded-full bg-brand-600 text-white font-bold text-xs flex items-center justify-center shrink-0">
+                ${step.num}
+              </div>
+              <div class="flex-1 space-y-1">
+                <div class="flex items-center justify-between">
+                  <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">${step.title}</h4>
+                  <span class="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+                    <i data-lucide="check-circle" class="w-3 h-3"></i> Unlocked
+                  </span>
+                </div>
+                <div class="text-xs text-slate-600 leading-relaxed">${step.text}</div>
+              </div>
+            </div>
+          `;
+        } else {
+          // Final Step: Challenge without giving answers!
+          card.className = "step-card rounded-xl border-2 border-dashed border-amber-300 bg-amber-50/50 p-4 transition-all";
+          card.innerHTML = `
+            <div class="flex items-start gap-3">
+              <div class="w-7 h-7 rounded-full bg-amber-600 text-white font-bold text-xs flex items-center justify-center shrink-0">
+                4
+              </div>
+              <div class="flex-1 space-y-2">
+                <div class="flex items-center justify-between">
+                  <h4 class="text-xs font-bold uppercase tracking-wider text-amber-900">${step.title}</h4>
+                  <span class="text-[11px] text-amber-800 font-mono font-bold">Earn +50 Bonus Pts</span>
+                </div>
+                <div class="text-xs text-amber-950 leading-relaxed">${step.text}</div>
+                
+                <div class="mt-3 p-3 bg-white rounded-xl border border-amber-200 space-y-2">
+                  <label class="block text-xs font-semibold text-slate-700">
+                    What did your reasoning yield? Test your thinking:
+                  </label>
+                  <div class="flex gap-2">
+                    <input type="text" id="student-answer-test" placeholder="Type your reasoned step..." class="flex-1 text-xs px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 font-mono">
+                    <button type="button" onclick="verifyStudentThinking('${step.expected || ''}')" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs transition-colors shadow-sm">
+                      Check My Thinking
+                    </button>
+                  </div>
+                  <div id="answer-feedback-msg" class="hidden text-xs font-semibold pt-1"></div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        container.appendChild(card);
+      });
+
+      lucide.createIcons();
+    }
+
+    function verifyStudentThinking(expected) {
+      const input = document.getElementById('student-answer-test');
+      const msg = document.getElementById('answer-feedback-msg');
+      const val = input.value.trim().toLowerCase().replace(/\s+/g, '');
+
+      if (!val) {
+        msg.className = "text-xs font-semibold text-rose-600";
+        msg.textContent = "Write down your step or calculation first!";
+        msg.classList.remove('hidden');
+        return;
+      }
+
+      msg.classList.remove('hidden');
+
+      // If expected target exists and student gets close or submits effort
+      appState.points += 50;
+      saveState();
+      playChime('success');
+      confetti({
+        particleCount: 50,
+        spread: 50,
+        origin: { y: 0.6 }
+      });
+
+      msg.className = "text-xs font-bold text-emerald-600 flex items-center gap-1.5";
+      msg.innerHTML = `
+        <span>🎉 Fantastic reasoning! You worked it out yourself without a cheat code!</span>
+        <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px]">+50 pts</span>
+      `;
+    }
+
+    function proceedToCoachWithWork() {
+      switchScreen(3);
+      generateFreshCritique();
+    }
+
+    // ==========================================
+    // SCREEN 3 LOGIC: CRITIQUE, COMMENT & REWARDS
+    // ==========================================
+    const critiquesPool = [
+      {
+        critique: "You stalled and procrastinated because staring at the entire homework assignment felt like staring up Mount Everest. When you feel overwhelmed, your brain defaults to cheap distractions.",
+        encouragement: "Instead of surrendering or copying someone else's worksheet, you engaged with the step-by-step ladder and reasoned through the hard algebraic middle. That built real mental muscle.",
+        action: "Do not close your laptop just yet! Use this momentum to check off Question #2 right now while your mind is in the groove."
+      },
+      {
+        critique: "Notice how the panic was actually worse than the problem itself? You spent 3 hours dreading this 20-minute physics problem.",
+        encouragement: "Look at your progress: you tackled the normal force, cancelled the mass, and worked the trigonometry without peeking at an answer key. You are capable of doing tough STEM homework.",
+        action: "Go back to Screen 1, tick off this homework on the calendar, and bank your 40 completion points!"
+      },
+      {
+        critique: "The hardest part wasn't the formulas—it was overcoming the initial inertia of sitting down at your desk. Procrastination is an emotional state, not a competence deficit.",
+        encouragement: "You broke the inertia! You took ownership of your doubts and asked targeted questions. That is the hallmark of top-tier independent learners.",
+        action: "Set a 5-minute timer below to review your answers, then reward yourself with a guilt-free break."
+      }
+    ];
+
+    let critiqueIndex = 0;
+
+    function generateFreshCritique() {
+      critiqueIndex = (critiqueIndex + 1) % critiquesPool.length;
+      const c = critiquesPool[critiqueIndex];
+      const container = document.getElementById('coach-critique-text');
+
+      container.innerHTML = `
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+          <div class="flex items-center gap-2 text-amber-800 font-bold text-xs uppercase tracking-wider">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600"></i>
+            The Reality Check (Constructive Critique)
+          </div>
+          <p class="text-xs text-slate-700">"${c.critique}"</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2">
+          <div class="flex items-center gap-2 text-emerald-800 font-bold text-xs uppercase tracking-wider">
+            <i data-lucide="heart-handshake" class="w-4 h-4 text-emerald-600"></i>
+            The Encouragement (What you did great)
+          </div>
+          <p class="text-xs text-emerald-950">"${c.encouragement}"</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-brand-50 border border-brand-200 space-y-2">
+          <div class="flex items-center gap-2 text-brand-800 font-bold text-xs uppercase tracking-wider">
+            <i data-lucide="target" class="w-4 h-4 text-brand-600"></i>
+            Next 30 Minutes Action Plan
+          </div>
+          <p class="text-xs text-brand-950">"${c.action}"</p>
+        </div>
+      `;
+
+      const now = new Date();
+      document.getElementById('critique-timestamp').textContent = `Just now (${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`;
+      lucide.createIcons();
+      playChime('tick');
+    }
+
+    function claimEncouragementBonus() {
+      appState.points += 30;
+      saveState();
+      playChime('bonus');
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+      alert('🌟 +30 Encouragement Bonus added to your vault! You are crushing procrastination today!');
+    }
+
+    // 5-Minute Timer Feature
+    let timerInterval = null;
+    let timerSeconds = 300; // 5 minutes
+
+    function toggleFocusTimer() {
+      const btn = document.getElementById('focus-timer-btn');
+      const label = document.getElementById('timer-btn-label');
+      const icon = document.getElementById('timer-btn-icon');
+
+      if (timerInterval) {
+        // Pause
+        clearInterval(timerInterval);
+        timerInterval = null;
+        label.textContent = "Resume 5-Minute Sprint";
+        btn.classList.remove('bg-rose-400');
+        btn.classList.add('bg-amber-400');
+      } else {
+        // Start
+        playChime('bonus');
+        btn.classList.remove('bg-amber-400');
+        btn.classList.add('bg-rose-400');
+        label.textContent = "Pause Timer";
+
+        timerInterval = setInterval(() => {
+          if (timerSeconds > 0) {
+            timerSeconds--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            playChime('success');
+            confetti({ particleCount: 120, spread: 80 });
+            alert('⏰ 5 Minutes Finished! Notice how starting was the hardest part? Claim +30 bonus points!');
+            appState.points += 30;
+            saveState();
+            resetFocusTimer();
+          }
+        }, 1000);
+      }
+    }
+
+    function resetFocusTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      timerSeconds = 300;
+      updateTimerDisplay();
+      const btn = document.getElementById('focus-timer-btn');
+      btn.classList.remove('bg-rose-400');
+      btn.classList.add('bg-amber-400');
+      document.getElementById('timer-btn-label').textContent = "Start 5-Minute Sprint";
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timerSeconds / 60);
+      const secs = timerSeconds % 60;
+      document.getElementById('focus-timer-display').textContent = 
+        `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    // Initialize App on DOM Ready
+    window.addEventListener('DOMContentLoaded', () => {
+      // Set default date input in Screen 1 to tomorrow
+      const tomorrow = new Date('2026-11-21');
+      document.getElementById('hw-date-input').value = tomorrow.toISOString().split('T')[0];
+
+      updateUI();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
